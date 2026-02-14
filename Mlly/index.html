@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Для Марины ❤️</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Segoe UI;
+    background:linear-gradient(135deg,#141e30,#243b55);
+    color:white;
+    text-align:center;
+    overflow-x:hidden;
+}
+
+button{
+    padding:10px 20px;
+    border:none;
+    border-radius:25px;
+    background:#ff4d6d;
+    color:white;
+    cursor:pointer;
+    margin:10px;
+}
+
+.media{
+    max-width:350px;
+    width:90%;
+    border-radius:20px;
+    box-shadow:0 0 25px rgba(255,255,255,0.6);
+    animation:fade 1s;
+}
+
+@keyframes fade{
+    from{opacity:0;transform:scale(0.9);}
+    to{opacity:1;transform:scale(1);}
+}
+
+#text{
+    margin-top:20px;
+    min-height:60px;
+    font-size:18px;
+}
+
+#startScreen{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:black;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+#final{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:40px;
+    opacity:0;
+    transition:2s;
+}
+
+.heart{
+    position:fixed;
+    color:#ff4d6d;
+    animation:float 4s linear infinite;
+}
+
+@keyframes float{
+    0%{transform:translateY(100vh);opacity:1;}
+    100%{transform:translateY(-10vh);opacity:0;}
+}
+</style>
+</head>
+<body>
+
+<div id="startScreen">
+    <h1>Марина ❤️</h1>
+    <button onclick="start()">Открыть</button>
+</div>
+
+<div id="main" style="display:none; padding:20px;">
+    <h1>Для тебя ❤️</h1>
+    <div id="mediaContainer"></div>
+    <div id="text"></div>
+    <div>
+        <button onclick="prev()">⬅</button>
+        <button onclick="next()">➡</button>
+        <button onclick="nextSong()">🎵</button>
+    </div>
+</div>
+
+<div id="final">Марина, я люблю тебя ❤️</div>
+
+<audio id="player"></audio>
+
+<script>
+
+const slides=[
+{type:"image",src:"media/photo1.jpg",text:"Твоя улыбка — мой свет"},
+{type:"image",src:"media/photo2.jpg",text:"Каждый день с тобой — подарок"},
+{type:"image",src:"media/photo3.jpg",text:"Ты делаешь мир ярче"},
+{type:"image",src:"media/photo4.jpg",text:"С тобой я настоящий"},
+{type:"image",src:"media/photo5.jpg",text:"Ты — моя любовь"},
+{type:"video",src:"media/video1.mp4",text:"Наши моменты ❤️"},
+{type:"video",src:"media/video2.mp4",text:"Я выбираю тебя всегда"}
+];
+
+const songs=[
+"media/music1.mp3",
+"media/music2.mp3",
+"media/music3.mp3"
+];
+
+let currentSlide=0;
+let currentSong=0;
+
+const container=document.getElementById("mediaContainer");
+const textDiv=document.getElementById("text");
+const player=document.getElementById("player");
+
+function start(){
+document.getElementById("startScreen").style.display="none";
+document.getElementById("main").style.display="block";
+player.src=songs[0];
+player.play();
+loadSlide();
+startHearts();
+}
+
+function loadSlide(){
+container.innerHTML="";
+let element;
+
+if(slides[currentSlide].type==="image"){
+element=document.createElement("img");
+element.src=slides[currentSlide].src;
+}else{
+element=document.createElement("video");
+element.src=slides[currentSlide].src;
+element.controls=true;
+}
+
+element.className="media";
+container.appendChild(element);
+textDiv.innerHTML=slides[currentSlide].text;
+
+if(currentSlide===slides.length-1){
+setTimeout(()=>{
+document.getElementById("final").style.opacity="1";
+},3000);
+}
+}
+
+function next(){
+if(currentSlide<slides.length-1){
+currentSlide++;
+loadSlide();
+}
+}
+
+function prev(){
+if(currentSlide>0){
+currentSlide--;
+loadSlide();
+}
+}
+
+function nextSong(){
+currentSong=(currentSong+1)%songs.length;
+player.src=songs[currentSong];
+player.play();
+}
+
+function startHearts(){
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.className="heart";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(20+Math.random()*30)+"px";
+heart.innerHTML="❤️";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),4000);
+},500);
+}
+
+</script>
+
+</body>
+</html>
